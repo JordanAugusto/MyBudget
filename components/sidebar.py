@@ -17,16 +17,16 @@ import numpy as np
 import pandas as pd
 from globals import *
 
-#df_cat_receita = pd.read_csv("C:\\Users\\Rodrigo\\Desktop\\Dash - Rodrigo Vanzelotti\\MyBudget\\MyBudget\\df_cat_receita.csv")
+#df_cat_receita = pd.read_csv("C:\\Users\\Jordan\\Desktop\\Dash - Jordan Toledo\\MyBudget\\MyBudget\\df_cat_receita.csv")
 #cat_receita = df_cat_receita['Categoria'].tolist()
 
-#df_cat_despesa = pd.read_csv("C:\\Users\\Rodrigo\\Desktop\\Dash - Rodrigo Vanzelotti\\MyBudget\\MyBudget\\df_cat_despesa.csv")
+#df_cat_despesa = pd.read_csv("C:\\Users\\Jordan\\Desktop\\Dash - Jordan Toledo\\MyBudget\\MyBudget\\df_cat_despesa.csv")
 #cat_despesa = df_cat_despesa['Categoria'].tolist()
 
 # ========= Layout ========= #
 layout = dbc.Card([
-                html.H1("MyBudget", className="text-primary"),
-                html.P("By ASIMOV", className="text-info"),
+                html.H1("Minhas Finanças", className="text-primary"),
+                html.P("By Jordan Toledo", className="text-info"),
                 html.Hr(),
 
 
@@ -157,7 +157,7 @@ layout = dbc.Card([
 
                             dbc.Col([
                                 html.Label("Categoria da receita"),
-                                #dbc.Select(id="select_receita", options=[{"label": i, "value": i} for i in cat_receita], value=cat_receita[0])
+                                dbc.Select(id="select_receita", options=[{"label": i, "value": i} for i in cat_receita], value=cat_receita[0])
                             ], width=4)
                         ], style={"margin-top": "25px"}),
                         
@@ -283,7 +283,7 @@ layout = dbc.Card([
                             ], flush=True, start_collapsed=True, id='accordion-despesa'),
                                                     
                         dbc.ModalFooter([
-                            dbc.Button("Adicionar despesa", color="error", id="salvar_despesa", value="despesa"),
+                            dbc.Button("Adicionar despesa", color="Warning", id="salvar_despesa", value="despesa"),
                             dbc.Popover(dbc.PopoverBody("Despesa Salva"), target="salvar_despesa", placement="left", trigger="click"),
                         ]
                         )
@@ -304,7 +304,7 @@ layout = dbc.Card([
                     dbc.NavLink("Dashboard", href="/dashboards", active="exact"),
                     dbc.NavLink("Extratos", href="/extratos", active="exact"),
                 ], vertical=True, pills=True, id='nav_buttons', style={"margin-bottom": "50px"}),
-            ThemeChangerAIO(aio_id="theme", radio_props={"value":dbc.themes.QUARTZ})
+            ThemeChangerAIO(aio_id="theme", radio_props={"value":dbc.themes.SOLAR})
 
         ], id='sidebar_completa'
     )
@@ -482,15 +482,15 @@ def salve_form_receita(n, descricao, valor, date, switches, categoria, dict_rece
         State("date-despesas", "date"),
         State("txt-despesa", "value"),
         State('store-despesas', 'data')
-    ])
+    ]
+)
 def salve_form_despesa(n, valor, switches, descricao, date, txt, dict_despesas):
     df_despesas = pd.DataFrame(dict_despesas)
 
     if n and not(valor == "" or valor== None):
-        valor = round(valor, 2)
+        valor = round(float(valor), 2)
         date = pd.to_datetime(date).date()
-        categoria = categoria[0] if type(categoria) == list else categoria
-
+        
         recebido = 1 if 1 in switches else 0
         fixo = 0 if 2 in switches else 0
         
